@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="icon" type="image/svg+xml" href="/vite.svg">
+        <title>список моих репозиториев</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="control_panel">
+            <form class="sorting_components">
+                <input name="q" type="search" placeholder="Find a repository…">
+                <div class="select_component">
+                    <!-- <label for="type_select">Select type:</label> -->
+                    <select name="type" id="type_select">
+                        <option value="type">Type</option>
+                        <option value="all">All</option>
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                        <option value="sources">Sources</option>
+                        <option value="forks">Forks</option>
+                        <option value="archived">Archived</option>
+                        <option value="can_be_sponsored">Can be sponsored</option>
+                        <option value="mirrors">Mirrors</option>
+                        <option value="templates">Templates</option>
+                    </select>
+                    <!-- <label for="language_select">Select language:</label> -->
+                    <select name="language" id="language_select">
+                        <option value="language">Language</option>
+                        <option value="all">All</option>
+                        <option value="html">HTML</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="css">CSS</option>
+                    </select>
+                    <!-- <label for="sort_select">Sort:</label> -->
+                    <select name="sort" id="sort_select">
+                        <option value="sort">Sort</option>
+                        <option value="last_update">Last updated</option>
+                        <option value="name">Name</option>
+                        <option value="stars">Stars</option>
+                    </select>
+                    <!-- <input type="submit" value="Найти"> -->
+                </div>
+            </form>
+            <a href="$">
+                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true">
+                    <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path>
+                </svg>
+                New
+            </a>
+        </div>
+        <ul class="list_repositories">
+            
+            <li>
+                <div>
+                    <div>
+                        <h3>my_repositories <span class="label_type">Public</span></h3> 
+                        <div>Updated 17 hours ago</div>
+                    </div>
+                    <div>
+                        <a class="star">*</a>
+                        <select name="list" class="list">
+                            <option value="list"></option>
+                        </select>
+                    </div>
+                </div>
+                
+            </li>
+
+            <li>DozArt.github.io</li>
+            <li>about_my</li>
+            <li>SKAN_project_PJ-04</li>
+        </ul>
+    </body>
+</html>
