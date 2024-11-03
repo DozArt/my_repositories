@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="../vite.svg" />
+    <title>список моих репозиториев</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="control_panel">
+      <div>каждый цикл уменьшает переменную пока не достигнет значения 0</div>
+      <button onclick="setVar3()">set variable = 3</button>
+      <button onclick="whileDem()">while</button>
+      <button onclick="doWhileDem()">dowhile</button>
+      <button onclick="forDem()">for</button>
+      <hr />
+      <div>
+        <h1>методы массива</h1>
+        <p class="array">
+          let arr [<span id="valueArr" class="item_array"></span>]
+        </p>
+        <br />
+        <ul>
+          <li><button onclick="methodArrPush()">arr.push("new")</button></li>
+          <li><button onclick="methodArrPop()">arr.pop()</button></li>
+          <li><button onclick="methodArrShift()">arr.shift()</button></li>
+          <li>
+            <button onclick="methodArrUnshift()">arr.unshift("new")</button>
+          </li>
+          <li>
+            <button onclick="methodArrSplise(1,1)">arr.splice(1,1)</button>
+          </li>
+          <li>
+            <button onclick="methodArrSplise(2,0,'new')">
+              arr.splice(2,0,'new')
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="column">
+        <p class="array">
+          const arr [<span id="valueArrConst" class="item_array"></span>]
+        </p>
+        <br />
+        <ul>
+          <li><button onclick="methodArrSlice()">.slice(1, 6)</button></li>
+          <li><button onclick="methodArrSlice(1,4)">.slice(1, 4)</button></li>
+          <li><button onclick="methodArrSlice()">.slice(-1, -6)</button></li>
+          <li><button onclick="methodArrConcat()">.concat(arr)</button></li>
+          <li><button onclick="methodArrForEach()">.forEach()</button></li>
+          <li><button onclick="methodArrIndexOf()">.indexOf("с")</button></li>
+        </ul>
+        <p class="array">
+          return [<span id="valueReturn" class="item_array"></span>]
+        </p>
+      </div>
+    </div>
+    <!-- <script src="cycles.js"></script> -->
+    <script src="methods.js"></script>
+  </body>
+</html>
