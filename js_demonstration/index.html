@@ -9,51 +9,56 @@
   </head>
   <body>
     <div class="control_panel">
+      <p class="array">
+        return [<span id="valueReturn"></span>]
+      </p>
+      <hr>
       <div>каждый цикл уменьшает переменную пока не достигнет значения 0</div>
       <button onclick="setVar3()">set variable = 3</button>
       <button onclick="whileDem()">while</button>
       <button onclick="doWhileDem()">dowhile</button>
       <button onclick="forDem()">for</button>
       <hr />
-      <div>
-        <h1>методы массива</h1>
+      <h1>методы массива</h1>
+      <button onclick="resetArr()">reset</button>
+      <div class="section">
         <p class="array">
-          let arr [<span id="valueArr" class="item_array"></span>]
+          let arr [<span id="valueArr"></span>]
         </p>
-        <br />
         <ul>
-          <li><button onclick="methodArrPush()">arr.push("new")</button></li>
-          <li><button onclick="methodArrPop()">arr.pop()</button></li>
-          <li><button onclick="methodArrShift()">arr.shift()</button></li>
-          <li>
-            <button onclick="methodArrUnshift()">arr.unshift("new")</button>
-          </li>
-          <li>
-            <button onclick="methodArrSplise(1,1)">arr.splice(1,1)</button>
-          </li>
-          <li>
-            <button onclick="methodArrSplise(2,0,'new')">
-              arr.splice(2,0,'new')
-            </button>
-          </li>
+          <li><button onclick="methodArrPush()">.push("new")</button></li>
+          <li><button onclick="methodArrPop()">.pop()</button></li>
+          <li><button onclick="methodArrShift()">.shift()</button></li>
+          <li><button onclick="methodArrUnshift()">.unshift("new")</button></li>
+          <li><button onclick="methodArrSplise(1,1)">.splice(1,1)</button></li>
+          <li><button onclick="methodArrSplise(2,0,'new1','new2')">.splice(2,0,'new1','new2)</button></li>
+          <li><button onclick="methodArrForEach()">.forEach()</button> присвоить новое значение х2</li>
         </ul>
       </div>
-      <div class="column">
+      <div class="section">
         <p class="array">
-          const arr [<span id="valueArrConst" class="item_array"></span>]
+          const arr [<span id="valueArrConst"></span>]
         </p>
-        <br />
         <ul>
-          <li><button onclick="methodArrSlice()">.slice(1, 6)</button></li>
+          <li><button onclick="methodArrSlice(1, 6)">.slice(1, 6)</button></li>
           <li><button onclick="methodArrSlice(1,4)">.slice(1, 4)</button></li>
-          <li><button onclick="methodArrSlice()">.slice(-1, -6)</button></li>
+          <li><button onclick="methodArrSlice(-6,-1)">.slice(-6,-1)</button></li>
           <li><button onclick="methodArrConcat()">.concat(arr)</button></li>
-          <li><button onclick="methodArrForEach()">.forEach()</button></li>
-          <li><button onclick="methodArrIndexOf()">.indexOf("с")</button></li>
+          <li><button onclick="methodArrIndexOf()">.indexOf("с")</button> поиск</li>
+          <li><button onclick="methodArrlastIndexOf()">.lastIndexOf("с")</button> поиск</li>
+          <li><button onclick="methodArrIncludes()">.includes("с")</button> поиск</li>
         </ul>
-        <p class="array">
-          return [<span id="valueReturn" class="item_array"></span>]
-        </p>
+        
+      </div>
+      <div class="section">
+        <p class="array">const users [<span id="valueUsers"></span>]</p>
+        <ul>
+          <li><button onclick="usersFind()">.find(item => item.id == 1)</button></li>
+          <li><button onclick="usersFindIndex()">.findIndex(item => item.name == "Вася")</button></li>
+          <li><button onclick="usersFindLastIndex()">.findLastIndex(item => item.name == "Вася")</button></li>
+          <li><button onclick="usersFilter()">.filter(item => item.name == "Вася")</button></li>
+          <li><button onclick="usersMap()">.map(item => item.name == "Вася")</button></li>
+        </ul>
       </div>
     </div>
     <!-- <script src="cycles.js"></script> -->
