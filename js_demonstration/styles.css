@@ -13,14 +13,36 @@ html {
 }
 
 body {
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
 }
+.control_panel{
+  display: flex;
+  /* justify-content: space-between; */
+
+  .array{
+    margin-top: 30px;
+    flex-grow: 1;
+    display: flex;
+    width:100%;
+    white-space: nowrap;    
+    align-items: flex-start;
+  }
+
+}
+
+.col{
+  display: flex;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
 .items_array {
   span {
     border: 1px solid #000000;
-    padding: 5px 10px;
-    margin: 0 5px;
+    padding: 3px 6px;
+    margin: -3px 2px 10px;
     position: relative;
 
     div {
@@ -32,13 +54,16 @@ body {
     }
   }
 }
-
-.section {
-  margin-top: 40px;
+.methods{
   display: flex;
-  ul {
-    list-style-type:none;
-    padding-left: 10px ;
-  }
 
+  .section {
+    flex-grow: 1;
+    display: flex;
+    width: 100%;
+    ul {
+      list-style-type:none;
+      padding-left: 10px ;
+    }
+  }
 }

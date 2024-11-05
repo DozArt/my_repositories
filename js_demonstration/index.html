@@ -8,23 +8,63 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="control_panel">
+    
+    <button onclick="resetArr()">reset</button>
+    <h1>объявление переменных</h1>
+    <div>
       <p class="array">
-        return [<span id="valueReturn"></span>]
+        let value1 = 
+        <span class="items_array" id="value1"></span>
+        <button onclick="visibility(value1)">Видимость</button>
+        <button onclick="assignment('value1')">присвоить х2</button>
       </p>
-      <hr>
-      <div>каждый цикл уменьшает переменную пока не достигнет значения 0</div>
-      <button onclick="setVar3()">set variable = 3</button>
-      <button onclick="whileDem()">while</button>
-      <button onclick="doWhileDem()">dowhile</button>
-      <button onclick="forDem()">for</button>
-      <hr />
-      <h1>методы массива</h1>
-      <button onclick="resetArr()">reset</button>
-      <div class="section">
+      <p class="array">
+        const value2 = 
+        <span class="items_array" id="value2"></span>
+        <button onclick="visibility(value2)">Видимость</button>
+        <button onclick="assignment('value2')">присвоить х2</button>
+      </p>
+      <p>if(true){<br>
         <p class="array">
-          let arr [<span id="valueArr"></span>]
+          &nbsp;&nbsp;let value3 = 
+          <span class="items_array" id="value3"></span>
+          <button onclick="visibility(value3)">Видимость</button>
+          <button onclick="assignment('value3')">присвоить х2</button>
         </p>
+        <p class="array">
+          &nbsp;&nbsp;const value4 = 
+          <span class="items_array" id="value4"></span>
+          <button onclick="visibility(value4)">Видимость</button>
+          <button onclick="assignment('value4')">присвоить х2</button>
+        </p>
+        <p class="array">
+          &nbsp;&nbsp;var value5 = 
+          <span class="items_array" id="value5"></span>
+          <button onclick="visibility(value5)">Видимость</button>
+          <button onclick="assignment('value5')">присвоить х2</button>
+        </p>
+        <p class="array">
+          &nbsp;&nbsp;value6 = 
+          <span class="items_array" id="value6"></span>
+          <button onclick="visibility(value6)">Видимость</button>
+          <button onclick="assignment('value6')">присвоить х2</button>
+        </p>}
+      </p>
+    </div>
+    <button onclick="setVar3()">set variable = 3</button>
+    <button onclick="whileDem()">while</button>
+    <button onclick="doWhileDem()">dowhile</button>
+    <button onclick="forDem()">for</button>
+    <h1>методы массива</h1>
+    
+    <div class="control_panel">
+      <p class="array">let arr <span class="col"  id="valueArr"></span></p>
+      <p class="array">const arr <span class="col" id="valueArrConst"></span></p>
+      <p class="array">let users <span class="col" id="valueUsers"></span></p>
+    </div>
+    <p class="array">return <span class="items_array" id="valueReturn"></span></p>
+    <div class="methods">
+      <div class="section">
         <ul>
           <li><button onclick="methodArrPush()">.push("new")</button></li>
           <li><button onclick="methodArrPop()">.pop()</button></li>
@@ -33,31 +73,31 @@
           <li><button onclick="methodArrSplise(1,1)">.splice(1,1)</button></li>
           <li><button onclick="methodArrSplise(2,0,'new1','new2')">.splice(2,0,'new1','new2)</button></li>
           <li><button onclick="methodArrForEach()">.forEach()</button> присвоить новое значение х2</li>
+          <li><button onclick="methodArrReduce()">.reduce()</button> сложение всех значений</li>
         </ul>
       </div>
       <div class="section">
-        <p class="array">
-          const arr [<span id="valueArrConst"></span>]
-        </p>
         <ul>
           <li><button onclick="methodArrSlice(1, 6)">.slice(1, 6)</button></li>
           <li><button onclick="methodArrSlice(1,4)">.slice(1, 4)</button></li>
           <li><button onclick="methodArrSlice(-6,-1)">.slice(-6,-1)</button></li>
           <li><button onclick="methodArrConcat()">.concat(arr)</button></li>
           <li><button onclick="methodArrIndexOf()">.indexOf("с")</button> поиск</li>
-          <li><button onclick="methodArrlastIndexOf()">.lastIndexOf("с")</button> поиск</li>
-          <li><button onclick="methodArrIncludes()">.includes("с")</button> поиск</li>
+          <li><button onclick="methodArrlastIndexOf()">.lastIndexOf("с")</button> поиск с конца</li>
+          <li><button onclick="methodArrIncludes()">.includes("с")</button> наличие</li>
+          <li><button onclick="methodJoin()">.join('')</button> объединить</li>
         </ul>
-        
       </div>
       <div class="section">
-        <p class="array">const users [<span id="valueUsers"></span>]</p>
         <ul>
           <li><button onclick="usersFind()">.find(item => item.id == 1)</button></li>
           <li><button onclick="usersFindIndex()">.findIndex(item => item.name == "Вася")</button></li>
           <li><button onclick="usersFindLastIndex()">.findLastIndex(item => item.name == "Вася")</button></li>
           <li><button onclick="usersFilter()">.filter(item => item.name == "Вася")</button></li>
-          <li><button onclick="usersMap()">.map(item => item.name == "Вася")</button></li>
+          <li><button onclick="usersMap()">.map(item => item.name.toUpperCase())</button></li>
+          <li><button onclick="usersSort()">.sort(fn)</button> отсортировать по имени</li>
+          <li><button onclick="usersReverse()">.revers()</button> отразить</li>
+          <li><button onclick="usersSplit()">[0].name.split('')</button> "разбить" первое имя на массив</li>
         </ul>
       </div>
     </div>

@@ -1,5 +1,3 @@
-let valLet = 1;
-const valConst = 2;
 
 if (true) {
   var valVar = 3; // видимость переменной выходит за пределы блока
