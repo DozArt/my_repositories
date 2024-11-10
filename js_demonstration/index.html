@@ -8,53 +8,111 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    
+    <header>
+      <a href="../index.html">home</a></p>
+      <p>return <span class="items_array" id="valueReturn"></span>
+      <hr>
+      </header>
+    <div class="space"></div>
     <button onclick="resetArr()">reset</button>
     <h1>объявление переменных</h1>
     <div>
-      <p class="array">
+      <p>
         let value1 = 
         <span class="items_array" id="value1"></span>
         <button onclick="visibility(value1)">Видимость</button>
         <button onclick="assignment('value1')">присвоить х2</button>
+        <button onclick="deleteValue('value1')">delete</button>
       </p>
-      <p class="array">
+      <p>
         const value2 = 
         <span class="items_array" id="value2"></span>
         <button onclick="visibility(value2)">Видимость</button>
         <button onclick="assignment('value2')">присвоить х2</button>
+        <button onclick="deleteValue('value2')">delete</button>
       </p>
       <p>if(true){<br>
-        <p class="array">
+        <p>
           &nbsp;&nbsp;let value3 = 
           <span class="items_array" id="value3"></span>
           <button onclick="visibility(value3)">Видимость</button>
           <button onclick="assignment('value3')">присвоить х2</button>
+          <button onclick="deleteValue('value3')">delete</button>
         </p>
-        <p class="array">
+        <p>
           &nbsp;&nbsp;const value4 = 
           <span class="items_array" id="value4"></span>
           <button onclick="visibility(value4)">Видимость</button>
           <button onclick="assignment('value4')">присвоить х2</button>
+          <button onclick="deleteValue('value4')">delete</button>
         </p>
-        <p class="array">
+        <p>
           &nbsp;&nbsp;var value5 = 
           <span class="items_array" id="value5"></span>
           <button onclick="visibility(value5)">Видимость</button>
           <button onclick="assignment('value5')">присвоить х2</button>
+          <button onclick="deleteValue('value5')">delete</button>
         </p>
-        <p class="array">
+        <p>
           &nbsp;&nbsp;value6 = 
           <span class="items_array" id="value6"></span>
           <button onclick="visibility(value6)">Видимость</button>
           <button onclick="assignment('value6')">присвоить х2</button>
+          <button onclick="deleteValue('value6')">delete</button>
         </p>}
       </p>
     </div>
-    <button onclick="setVar3()">set variable = 3</button>
-    <button onclick="whileDem()">while</button>
-    <button onclick="doWhileDem()">dowhile</button>
-    <button onclick="forDem()">for</button>
+    <hr>
+    <h1>typeof</h1>
+    <ul>
+      <li><button onclick="typeOfValue(undefined)">undefined</button></li>
+      <li><button onclick="typeOfValue(0)">0</button></li>
+      <li><button onclick="typeOfValue(1n)">1n</button></li>
+      <li><button onclick="typeOfValue(true)">true</button></li>
+      <li><button onclick="typeOfValue('foo')">'foo'</button></li>
+      <li><button onclick="typeOfValue(Symbol())">Symbol()</button></li>
+      <li><button onclick="typeOfValue({})">{}</button></li>
+      <li><button onclick="typeOfValue(null)">null</button></li>
+      <li><button onclick="typeOfValue(function () {})">function () {}</button></li>
+    </ul>
+    <h1>Ссылочный тип данных</h1>
+    <div class="col">
+      <div class="space-between">
+        <code><pre>
+let user = {
+  name: "John",
+  hi() {
+    return this.name
+  }
+}
+        </pre></code>
+        <button onclick="getUser()">user.hi()</button> выполнить метод hi
+      </div>
+      <div class="space-between">
+        <code><pre>
+let admin = {
+  name: "Ivan",
+  hi: user.hi,  // заимствуем метод у user
+  // стрелочная функция
+  hi_this: () => {
+    return name;
+  },
+};
+        </pre></code>
+        <button onclick="getAdmin()">admin.hi()</button>
+        <button onclick="getAdminThis()">admin.hi_this()</button>
+      </div>
+    </div>
+    <hr>
+    <h1>Циклы</h1>
+    <p class="array">let variableForCycle = <span class="items_array" id="variableForCycle"></span></p>
+    <button onclick="resetArr()">set 5</button>
+    <p>циклы уменьшают variableForCycle на 1 пока выполняется условие variableForCycle >= 0</p>
+    <button onclick="cycleFor()">for</button>
+
+    <button onclick="cycleWhile()">while</button>
+    <button onclick="cycleDoWhile()">dowhile</button>
+    <hr>
     <h1>методы массива</h1>
     
     <div class="control_panel">
@@ -62,7 +120,6 @@
       <p class="array">const arr <span class="col" id="valueArrConst"></span></p>
       <p class="array">let users <span class="col" id="valueUsers"></span></p>
     </div>
-    <p class="array">return <span class="items_array" id="valueReturn"></span></p>
     <div class="methods">
       <div class="section">
         <ul>
@@ -101,7 +158,131 @@
         </ul>
       </div>
     </div>
-    <!-- <script src="cycles.js"></script> -->
-    <script src="methods.js"></script>
+    <hr>
+    <div class="methods">
+      <div>
+        <h1>Map</h1>
+        <code class="space-between"><pre>
+var sayings = new Map()
+        </pre></code>
+        <ul>
+          <li><button onclick="typeofMap()">typeof sayings</button></li>
+          <li><button onclick="sizeSayings()">.size</button></li>
+          <h3>добавление значения</h3>
+          <li><button onclick="setSayings('elephant', 'toot')">.set("elephant", "toot")</button></li>
+          <li><button onclick="setSayings('cat', 'meow')">.set("cat", "meow")</button></li>
+          <li><button onclick="setSayings('dog', 'woof')">.set("dog", "woof")</button></li>
+          <h3>поиск по ключу</h3>
+          <li><button onclick="getSayings('elephant')">.get("elephant")</button></li>
+          <li><button onclick="getSayings('meow')">.get("meow")</button></li>
+          <li><button onclick="getSayings()">.get()</button></li>
+          <h3>ввыод значний</h3>
+          <li><button onclick="keysSayings()">.keys</button></li>
+          <li><button onclick="valuesSayings()">.values()</button></li>          
+          <h3>наличие</h3>
+          <li><button onclick="hasSayings('cat')">.set("cat")</button></li>
+          <li><button onclick="hasSayings('fox')">.set("fox")</button></li>
+          <h3>удаление</h3>
+          <li><button onclick="deleteSayings('elephant')">.delete("elephant")</button></li>
+          <li><button onclick="deleteSayings('cat')">.delete("cat")</button></li>
+          <li><button onclick="deleteSayings('dog')">.delete("dog")</button></li>
+          <li><button onclick="clearSayings()">.clear()</button></li>
+          <li></li>
+        </ul>
+      </div>
+      <div>
+        <h1>Set</h1>
+        <code class="space-between"><pre>
+var people = new Set()
+
+let john = { name: "John" };
+let pete = { name: "Pete" };
+let mary = { name: "Mary" };
+        </pre></code>
+        <p class="array">var sayings = new Map()<span class="items_array" id="sayings"></span></p>
+        <ul>
+          <li><button onclick="typeofSet()">typeof sayings</button></li>
+          <li><button onclick="sizePeople()">.size</button></li>
+          <h3>добавление значения</h3>
+          <li><button onclick="addPeople()">.add</button></li>
+
+          <h3>наличие</h3>
+          <li><button onclick="hasPeople('John')">.has("John")</button></li>
+          <li><button onclick="hasPeople(pete)">.has(pete)</button></li>
+          <h3>удаление</h3>
+          <li><button onclick="deletePeople(mary)">.delete(mary)</button></li>
+          <li><button onclick="clearPeople()">.clear()</button></li>
+          <!-- <h1></h1> -->
+          <li></li>
+        </ul>
+      </div>
+      <div>
+        <h1>Destructuring</h1>
+        <code class="space-between"><pre>
+function destructuring(variables){
+  let [one, two, ...other] = variables
+  console.log(one, two, other)
+
+  let {name: n = "dont people"} = one
+  console.log(n)
+}
+        </pre></code>
+        <button onclick="destructuringOneTwoOther(sayings)">destructuring(sayings)</button>
+        <button onclick="destructuringOneTwoOther(people)">destructuring(people)</button>
+      </div>
+      <div>
+        <h1>Class</h1>
+        <code class="space-between"><pre>
+class Clock {
+  constructor({ template }) {
+    this.template = template;
+  }
+
+  render(){
+    let date = new Date();
+
+    let hours = date.getHours()
+    if (hours < 10) hours = '0' + hours;
+    
+    let mins = date.getMinutes();
+    if (mins < 10) mins = '0' + mins;
+
+    let secs = date.getSeconds();
+    if (secs < 10) secs = '0' + secs;
+
+    let output = this.template
+      .replace('h', hours)
+      .replace('m', mins)
+      .replace('s', secs);
+
+    console.log(output);
+  } 
+
+  stop(){
+    clearInterval(this.timer);
+  }
+
+  start(){
+    this.render();
+    this.timer = setInterval(
+      () => this.render(), 1000
+    );
+  }
+}
+
+let clock = new Clock({template: 'h:m:s'});
+          
+        </pre></code>
+        <button onclick="clock.start()">clock.start()</button>
+        <button onclick="clock.stop()">clock.stop()</button>
+      </div>
+    </div>
+    <footer></footer>
+    <script src="./set.js"></script>
+    <script src="./map.js"></script>
+    <script src="./class.js"></script>
+    <script src="./destructuring.js"></script>
+    <script src="./methods.js"></script>
+    
   </body>
 </html>
