@@ -94,6 +94,7 @@ body {
   border-radius: 100px;
   font-size: 12px;
   padding: 0px 5px;
+  margin: 0 0 0 5px;
 }
 
 .list {
@@ -112,6 +113,7 @@ body {
   border-radius: 50%;
   background-color: var(--main-bg-color);
   display: inline-block;
+  margin-right: 5px;
 }
 
 .circle.html {
@@ -120,11 +122,20 @@ body {
 .circle.javascript {
   background-color: #f1e05a;
 }
+.circle.python {
+  background-color: #3572A7;
+}
+.circle.css {
+  background-color: #563d7c;
+}
 
 .programmingLanguage {
   font-size: 0.75rem;
 }
 
+.date_updated {
+  margin-left: 30px;
+}
 .star {
   border: 1px solid var(--main-border-color);
   border-radius: var(--base-radius) 0 0 var(--base-radius);

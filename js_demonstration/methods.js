@@ -307,3 +307,174 @@ function usersSplit() {
   valReturn = users[0].name.split("");
   outputValue();
 }
+
+
+
+// function foo() {
+//   const x = 10;
+  
+//   return {
+//     x: 20,
+//     bar: function () {
+//       console.log(this.x);
+//     },
+//     baz: () => {
+//       console.log(this.x);
+//     },
+//   };
+// }
+
+// const obj = foo();
+
+// obj.bar(); // 20
+// obj.baz(); // undefined
+
+// const obj2 = foo.call({ x: 30 });
+
+// obj2.bar(); // 20
+// obj2.baz(); // 30
+
+// const x = obj2.bar;
+// const y = obj2.baz;
+
+// x(); // undefined
+// y(); // 30
+
+/*
+Обычная функция получает констекст выполнения:
+1. вызывается как метод у объекта (контекст этот объект)
+2. вызывается по средствам bind, call, apply (первый параметр, переданный в методы, будет контекстом)
+*/
+
+
+// wtf
+// function applyAll(func, ...arg){
+//   return func(...arg);
+// }
+
+// function applyAll(func) {
+//   return func.apply(this, [].slice.call(arguments, 1));
+// }
+
+// alert( applyAll(Math.min, 2, -2, 3) ); // -2
+
+
+
+/*
+Все объявления в корне файла это объявление методов и свойств у глобального объекта (window, globalThis)
+Вызов просто функции (не как метод) это вызов функции как метод у глобального объекта
+
+Обычная функция получает контекст выполнения в момент вызова:
+1. как метод у объекта (контекст выполнения будет этот объект, методом которого функция вызывалась)
+2. по средствам bind, call, apply (первый параметр, переданный в методы, будет контекстом выполнения)
+
+Стрелочная функция запоминает контекст выполнения при создании из функции, которая ее создавала
+*/
+
+// const window = globalThis;
+
+// function f() {
+//   console.log('f', this === window);
+// }
+
+// f();
+
+// const f2 = function() {
+//   console.log('f2', this === window);
+// }
+
+// f2();
+
+// const f3 = () => {
+//   console.log('f3', this);
+// }
+
+// f3();
+
+
+// function makeF4() {
+//   console.log('make f4', this === window)
+//   return () => {
+//     console.log('f4', this === window)
+//   }
+// };
+
+// const f4 = makeF4();
+
+// f4();
+
+// function makeF5() {
+//   console.log('make f5', this === window)
+//   return function() {
+//     console.log('f5', this === window)
+//   }
+// };
+
+// const f5 = makeF5();
+
+// f5();
+
+// function makeF6() {
+//   console.log('make f6', this)
+//   return () => {
+//     console.log('f6', this)
+//   }
+// };
+
+// const f6 = makeF6.call({ name: 'not-global' });
+// f6();
+
+// function makeF7() {
+//   console.log('make f7', this)
+//   return function() {
+//     console.log('f7', this)
+//   }
+// };
+
+// const f7 = makeF7.call({ name: 'not-global' });
+// f7();
+
+/*
+Все объявления в корне файла это объявление методов и свойств у глобального объекта (window, globalThis)
+Вызов просто функции (не как метод) это вызов функции как метод у глобального объекта
+
+Обычная функция получает контекст выполнения в момент вызова:
+1. как метод у объекта (контекст выполнения будет этот объект, методом которого функция вызывалась)
+2. по средствам bind, call, apply (первый параметр, переданный в методы, будет контекстом выполнения)
+
+Стрелочная функция запоминает контекст выполнения при создании из функции, которая ее создавала
+*/
+
+// function foo() {
+//   const x = 10;
+//   console.log(this)
+//   return {
+//     x: 20,
+//     bar: function () {
+//       console.log(this)
+//       console.log(this.x);
+//     },
+//     baz: () => {
+//       console.log(this)
+//       console.log(this.x);
+//     },
+//   };
+// }
+
+// const obj = foo();
+
+// obj.bar();
+// obj.baz();
+
+// const obj2 = foo.call({ x: 30 });
+
+// obj2.bar();
+// obj2.baz();
+
+// const x = obj2.bar;
+// const y = obj2.baz;
+
+// x();
+// y();
+
+

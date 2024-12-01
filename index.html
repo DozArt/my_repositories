@@ -9,6 +9,7 @@
   </head>
   <body>
     <div class="control_panel">
+      <input id="search_user" type="search" oninput="reload(value)" placeholder="Search" />
       <form class="sorting_components">
         <input name="q" type="search" placeholder="Find a repository…" />
         <div class="select_component">
@@ -60,62 +61,11 @@
         New
       </a>
     </div>
-    <ul class="list_repositories">
-      <li>
-        <div>
-          <div>
-            <h3>my_repositories <span class="label_type">Public</span></h3>
-            <div class="lining">
-              <span>
-                <span class="circle html"></span>
-                <span class="programmingLanguage">HTML</span> </span
-              >Updated 17 hours ago
-            </div>
-          </div>
-          <div></div>
-        </div>
-      </li>
-      <li>
-        <div>
-          <div>
-            <h3>DozArt.github.io <span class="label_type">Public</span></h3>
-            <div class="lining">
-              <span>
-                <span class="circle javascript"></span>
-                <span class="programmingLanguage">HTML</span> </span
-              >Updated 17 hours ago
-            </div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div>
-          <div>
-            <h3>about_my <span class="label_type">Public</span></h3>
-            <div class="lining">
-              <span>
-                <span class="circle javascript"></span>
-                <span class="programmingLanguage">JavaScript</span> </span
-              >Updated 17 hours ago
-            </div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div>
-          <div>
-            <h3>SKAN_project_PJ-04 <span class="label_type">Public</span></h3>
-            <div class="lining">
-              <span>
-                <span class="circle html"></span>
-                <span class="programmingLanguage">HTML</span> </span
-              >Updated 17 hours ago
-            </div>
-          </div>
-        </div>
-      </li>
+    <div></div>
+    <ul id="repositories" class="list_repositories">
     </ul>
     <a href="./js_demonstration/index.html">демонстрация js</a>
+    <script defer src="./set.js"></script>
     <div class="loading">loading...</div>
   </body>
 </html>
