@@ -1,12 +1,27 @@
 let repositories = []; // Глобальная переменная для хранения данных
+
+// нужна функция обработчик ссылки window.location
+
+// загрузка данных данных из storage
+function getSessionPathname(){
+  let pathname = sessionStorage.getItem('pathname')
+  sessionStorage.removeItem('pathname')
+  if (pathname) {
+    let path_split = pathname.split('/');
+    if (path_split.indexOf('') === 0) path_split.shift();
+    console.log(path_split)
+    window.history.pushState('', '', `/${path_split[0]}`);
+    // window.location = (`/${path_split[0]}`)
+  }
+}
+getSessionPathname()
+
+
 async function loadData() {
   try {
-    const response = await fetch('./data.json'); // Загрузка JSON-файла
-    repositories = await response.json(); // Сохранение данных в переменную
-    const search = window.location.hash.slice(1)
-    // console.log(window.location.hash.slice(1))
+    const search = window.location.pathname
     document.getElementById('search_user').value = search
-    generationElement(search)
+    // generationElement(search)
     
   } catch (error) {
     console.error('Ошибка загрузки данных:', error);
@@ -15,19 +30,19 @@ async function loadData() {
 
 loadData();
 
-function reload(name){
-  generationElement(name)
-  window.history.pushState({ page: 2 }, '', `/#${name}`);
-  console.log(window.location.href.split('#')[1])
-  localStorage.setItem('name' , name)
-}
+// function reload(name){
+//   // generationElement(name)
+//   window.history.pushState({ page: 2 }, '', `/#${name}`);
+//   console.log(window.location.href.split('#')[1])
+//   localStorage.setItem('name' , name)
+// }
 
-function generationElement(filter = "") {
-  clearInElementById('repositories')
-  repositories
-      .filter((repo) => repo.author.toLowerCase().indexOf(filter.toLowerCase()) > -1 )
-      .forEach((iter) => createInElementById('repositories', iter))
-}
+// function generationElement(filter = "") {
+//   clearInElementById('repositories')
+//   repositories
+//       .filter((repo) => repo.author.toLowerCase().indexOf(filter.toLowerCase()) > -1 )
+//       .forEach((iter) => createInElementById('repositories', iter))
+// }
 
 function clearInElementById(id) {
   document.getElementById(id).innerHTML = ''
@@ -35,13 +50,21 @@ function clearInElementById(id) {
 
 function createInElementById(id, array) {
   const addRepositories = document.getElementById(id)
+  let data_update = new Date(array.updated_at);
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  const formattedDate = data_update.toLocaleDateString('en-US', options);
+
+  // отдельно генерация списка пользователей по значению переменной search
+
+  // добавить ссылку на репозиторий
+  // Добавить имя пользователя
   const repository = createElement('li', {
     children: [
         createElement('h3', {
-            text: `${array.author}/${array.title}`,
+            text: `${array.name}`,
             children: [
               createElement('span', {
-                  text: array.public ? "Public" :'',
+                  text: !array.private ? "Public" :'',
                   classes: 'label_type'
               }),
             ]
@@ -52,7 +75,7 @@ function createInElementById(id, array) {
               createElement('span', {
                 children: [
                   createElement('span', {
-                    classes: ['circle', array.language.toLowerCase()]
+                    classes: ['circle', array.language?.toLowerCase()]
                   }),
                   createElement('span', {
                     classes: 'programmingLanguage',
@@ -60,7 +83,7 @@ function createInElementById(id, array) {
                   }),
                   createElement('span', {
                     classes: 'date_updated',
-                    text: 'Updated 17 hours ago',
+                    text: `Updated on ${formattedDate}`,
                   })
                 ]
               })
@@ -121,3 +144,22 @@ function createElement(tagName, options = {}) {
 
   return element;
 }
+
+
+const username = "DozArt";
+const url = `https://api.github.com/users/${username}/repos`;
+
+fetch(url)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then((repos) => {
+    clearInElementById('repositories');
+    repos.forEach((repo) => {
+      createInElementById('repositories', repo);
+    });
+  })
+  .catch((error) => console.error('Error:', error));
