@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles.css" />
     <script>
       let pathname = window.location.pathname;
-      let search = window.location.search;
+      // let search = window.location.search;
 
       sessionStorage.setItem("pathname", pathname);
       // sessionStorage.setItem('search', search)
@@ -17,10 +17,10 @@
       if (path_split.indexOf("") === 0) path_split.shift();
       if (path_split.length < 3)
         switch (
-          path_split[0] && path_split[1] !== '404.html'
+          path_split[0] //  && path_split[1] !== '404.html'
         ) {
           case "my_repositories":
-            window.location = `/my_repositories${search}`;
+            window.location = `/my_repositories`;
             break;
         }
     </script>
