@@ -6,10 +6,18 @@
     <title>список моих репозиториев</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
+    <script defer src="./set.js"></script>
   </head>
   <body>
     <div class="control_panel">
-      <input id="search_user" type="search" oninput="" placeholder="Search" />
+      <form
+        action=""
+        method="get"
+        class="sorting_components"
+        onsubmit="event.preventDefault(); submitSearch(search_user.value)"
+      >
+        <input id="search_user" type="search" placeholder="Search" />
+      </form>
       <form class="sorting_components">
         <input name="q" type="search" placeholder="Find a repository…" />
         <div class="select_component">
@@ -61,11 +69,9 @@
         New
       </a>
     </div>
-    <div></div>
-    <ul id="repositories" class="list_repositories">
-    </ul>
+    <h2 id="user_name"></h2>
+    <ul id="repositories" class="list_repositories"></ul>
     <a href="./js_demonstration/index.html">демонстрация js</a>
-    <script defer src="./set.js"></script>
     <div class="loading">loading...</div>
   </body>
 </html>

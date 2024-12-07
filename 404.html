@@ -6,10 +6,26 @@
     <title>список моих репозиториев</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
-    <script src="routing_emulation.js"></script>
+    <script>
+      let pathname = window.location.pathname;
+      let search = window.location.search;
+
+      sessionStorage.setItem("pathname", pathname);
+      // sessionStorage.setItem('search', search)
+
+      let path_split = pathname.split("/");
+      if (path_split.indexOf("") === 0) path_split.shift();
+      if (path_split.length < 3)
+        switch (
+          path_split[0] && path_split[1] !== '404.html'
+        ) {
+          case "my_repositories":
+            window.location = `/my_repositories${search}`;
+            break;
+        }
+    </script>
   </head>
   <body>
-    Ошибка 404, но если очень надо, то правильную ссылку я перенаправлю
-    
+    Ошибка 404, попробуйте что-то другое
   </body>
 </html>

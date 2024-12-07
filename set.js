@@ -1,101 +1,125 @@
-let repositories = []; // Глобальная переменная для хранения данных
+let url_string = window.location.href;
+let url_full = new URL(url_string);
+let search_value = url_full.searchParams.get("username");
 
-// нужна функция обработчик ссылки window.location
-
-// загрузка данных данных из storage
-function getSessionPathname(){
-  let pathname = sessionStorage.getItem('pathname')
-  sessionStorage.removeItem('pathname')
-  if (pathname) {
-    let path_split = pathname.split('/');
-    if (path_split.indexOf('') === 0) path_split.shift();
-    console.log(path_split)
-    window.history.pushState('', '', `/${path_split[0]}`);
-    // window.location = (`/${path_split[0]}`)
-  }
-}
-getSessionPathname()
-
-
-async function loadData() {
-  try {
-    const search = window.location.pathname
-    document.getElementById('search_user').value = search
-    // generationElement(search)
-    
-  } catch (error) {
-    console.error('Ошибка загрузки данных:', error);
-  }
+if (search_value) {
+  document.getElementById("search_user").value = search_value;
+  searchUsers(search_value);
 }
 
-loadData();
 
-// function reload(name){
-//   // generationElement(name)
-//   window.history.pushState({ page: 2 }, '', `/#${name}`);
-//   console.log(window.location.href.split('#')[1])
-//   localStorage.setItem('name' , name)
-// }
+let search = ""; // window.location.search  // пока не требуется
+let user = "";
+let repos = "";
+let pathname = sessionStorage.getItem("pathname");
+sessionStorage.removeItem("pathname");
 
-// function generationElement(filter = "") {
-//   clearInElementById('repositories')
-//   repositories
-//       .filter((repo) => repo.author.toLowerCase().indexOf(filter.toLowerCase()) > -1 )
-//       .forEach((iter) => createInElementById('repositories', iter))
-// }
+if (pathname) {
+  let path_split = pathname.split("/");
+  if (path_split.indexOf("") === 0) path_split.shift();
+  if (path_split.indexOf("my_repositories") === 0) path_split.shift();
+  user = path_split[0];
+  if (user) loadRepos(user);
+  repos = path_split[1]; // а он есть?
+  console.log(path_split);
+  window.history.pushState({ page: 2 }, "", `${pathname}${search}`);
+}
+
+
+function submitSearch(value) {
+  window.history.pushState(
+    { page: 2 },
+    "",
+    `/my_repositories/?username=${value}`
+  );
+  searchUsers(value);
+  console.log("run SubmitSearchUsers");
+}
+
+const submitUser = function (value) {
+  window.history.pushState({ page: 2 }, "", `/my_repositories/${value}`);
+  console.log("run submitUser");
+  loadRepos(value);
+};
 
 function clearInElementById(id) {
-  document.getElementById(id).innerHTML = ''
+  document.getElementById(id).innerHTML = "";
 }
 
-function createInElementById(id, array) {
-  const addRepositories = document.getElementById(id)
-  let data_update = new Date(array.updated_at);
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  const formattedDate = data_update.toLocaleDateString('en-US', options);
+function setTitleUserName(user_name) {
+  const elementTitle = document.getElementById("user_name");
+  elementTitle.textContent = user_name;
+}
 
-  // отдельно генерация списка пользователей по значению переменной search
+function createListUsers(id, array) {
+  const addUsers = document.getElementById(id);
+
+  const user = createElement("li", {
+    children: [
+      createElement("h3", {
+        children: [
+          createElement("a", {
+            attributes: { onclick: `submitUser("${array.login}")` },
+            text: `${array.login}`,
+          }),
+        ],
+      }),
+      createElement("img", {
+        attributes: { src: array.avatar_url },
+        classes: "avatar",
+      }),
+    ],
+  });
+
+  addUsers.appendChild(user);
+}
+
+function createListRepositories(id, array) {
+  const addRepositories = document.getElementById(id);
+  let data_update = new Date(array.updated_at);
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  const formattedDate = data_update.toLocaleDateString("en-US", options);
 
   // добавить ссылку на репозиторий
-  // Добавить имя пользователя
-  const repository = createElement('li', {
+  const repository = createElement("li", {
     children: [
-        createElement('h3', {
-            text: `${array.name}`,
+      createElement("h3", {
+        text: `${array.name}`,
+        children: [
+          createElement("span", {
+            text: !array.private ? "Public" : "",
+            classes: "label_type",
+          }),
+        ],
+      }),
+      createElement("div", {
+        classes: "lining",
+        children: [
+          createElement("span", {
             children: [
-              createElement('span', {
-                  text: !array.private ? "Public" :'',
-                  classes: 'label_type'
+              createElement("span", {
+                classes: [
+                  "circle",
+                  array.language?.toLowerCase().replace(" ", "_"),
+                ],
               }),
-            ]
-        }),
-        createElement('div', {
-            classes: 'lining',
-            children: [
-              createElement('span', {
-                children: [
-                  createElement('span', {
-                    classes: ['circle', array.language?.toLowerCase()]
-                  }),
-                  createElement('span', {
-                    classes: 'programmingLanguage',
-                    text: array.language
-                  }),
-                  createElement('span', {
-                    classes: 'date_updated',
-                    text: `Updated on ${formattedDate}`,
-                  })
-                ]
-              })
+              createElement("span", {
+                classes: "programmingLanguage",
+                text: array.language,
+              }),
+              createElement("span", {
+                classes: "date_updated",
+                text: `Updated on ${formattedDate}`,
+              }),
             ],
-        })
-    ]
+          }),
+        ],
+      }),
+    ],
   });
 
   addRepositories.appendChild(repository);
 }
-
-
 
 /**
  * Универсальная функция для создания HTML-элементов.
@@ -112,54 +136,80 @@ function createElement(tagName, options = {}) {
 
   // Установка атрибутов
   if (options.attributes) {
-      for (const [key, value] of Object.entries(options.attributes)) {
-          element.setAttribute(key, value);
+    for (const [key, value] of Object.entries(options.attributes)) {
+      // Если атрибут - событие (например, onclick), добавляем как слушатель
+      if (key.startsWith("on") && typeof value === "function") {
+        const eventName = key.slice(2).toLowerCase(); // "onclick" -> "click"
+        element.addEventListener(eventName, value);
+      } else {
+        element.setAttribute(key, value); // Для обычных атрибутов
       }
+    }
   }
 
   // Добавление классов
   if (options.classes) {
-      if (Array.isArray(options.classes)) {
-          element.classList.add(...options.classes);
-      } else if (typeof options.classes === 'string') {
-          element.classList.add(options.classes);
-      }
+    if (Array.isArray(options.classes)) {
+      element.classList.add(...options.classes);
+    } else if (typeof options.classes === "string") {
+      element.classList.add(options.classes);
+    }
   }
 
   // Установка текстового контента
   if (options.text) {
-      element.textContent = options.text;
+    element.textContent = options.text;
   }
 
   // Добавление дочерних элементов
   if (options.children) {
-      options.children.forEach(child => {
-          if (typeof child === 'string') {
-              element.appendChild(document.createTextNode(child));
-          } else if (child instanceof HTMLElement) {
-              element.appendChild(child);
-          }
-      });
+    options.children.forEach((child) => {
+      if (typeof child === "string") {
+        element.appendChild(document.createTextNode(child));
+      } else if (child instanceof HTMLElement) {
+        element.appendChild(child);
+      }
+    });
   }
 
   return element;
 }
 
+function searchUsers(search_query) {
+  const url = `https://api.github.com/search/users?q=${search_query}`;
 
-const username = "DozArt";
-const url = `https://api.github.com/users/${username}/repos`;
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((users) => {
+      clearInElementById("repositories");
+      users.items.forEach((user) => {
+        createListUsers("repositories", user);
+      });
+    })
+    .catch((error) => console.error("Error:", error));
+}
 
-fetch(url)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then((repos) => {
-    clearInElementById('repositories');
-    repos.forEach((repo) => {
-      createInElementById('repositories', repo);
-    });
-  })
-  .catch((error) => console.error('Error:', error));
+function loadRepos(username = "DozArt") {
+  const url = `https://api.github.com/users/${username}/repos`;
+
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((repos) => {
+      clearInElementById("repositories");
+      setTitleUserName(repos[0].owner.login);
+      repos.forEach((repo) => {
+        createListRepositories("repositories", repo);
+      });
+    })
+    .catch((error) => console.error("Error:", error));
+}

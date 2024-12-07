@@ -73,6 +73,11 @@ body {
     }
   }
 }
+
+.avatar {
+  width: 100px;
+}
+
 .sorting_components {
   display: flex;
   gap: var(--base-field);
@@ -123,7 +128,7 @@ body {
   background-color: #f1e05a;
 }
 .circle.python {
-  background-color: #3572A7;
+  background-color: #3572a7;
 }
 .circle.css {
   background-color: #563d7c;
