@@ -7,9 +7,22 @@ window.addEventListener('DOMContentLoaded', () => {
   getUserAndReposFromSession();
   getUserAndReposFromLocation();
   
-  if(user) renderPage({ page: 'repositories' });
+  if(repos) renderPage({ page: 'repos_detail' });
+  else if(user) renderPage({ page: 'repositories' });
   else if(search_value) renderPage({page: 'search_user'})
   // else if(repos) renderPage({ page: 'search_user' });
+});
+
+window.addEventListener('popstate', (event) => {
+  getSearchFromLocation();
+  getUserAndReposFromLocation();
+  if (event.state) {
+    console.log(event.state)
+    renderPage(event.state);
+  } else {
+    console.log('нет состояния')
+    // renderPage({ page: "default" });
+  }
 });
 
 
@@ -33,35 +46,12 @@ function getUserAndReposFromSession() {
 
   let pathname = sessionStorage.getItem("pathname");
   sessionStorage.removeItem("pathname");
-  
   if (pathname) {
     let path_split = pathname.split("/").filter(item => item !== "" && item !== "my_repositories");
-    // user = path_split[0];
-    // if (user) loadRepos(user);
-    // repos = path_split[1]; // а он есть?
     console.log('даннные из session', path_split);
     window.history.pushState({ page: 'repositories' }, "", `${pathname}${search}`);
-    // return true;
   }
 }
-
-
-// if (search_value) {
-//   document.getElementById("search_user").value = search_value;
-//   searchUsers(search_value);
-// }
-
-window.addEventListener('popstate', (event) => {
-  getSearchFromLocation();
-  getUserAndReposFromLocation();
-  if (event.state) {
-    console.log(event.state)
-    renderPage(event.state);
-  } else {
-    console.log('нет состояния')
-    // renderPage({ page: "default" });
-  }
-});
 
 
 function submitSearch(value) {
@@ -75,19 +65,39 @@ function submitSearch(value) {
 }
 
 const submitUser = function (value) {
+  user = value;
   window.history.pushState({ page: 'repositories' }, "", `/my_repositories/${value}`);
   console.log("run submitUser");
-  user = value;
+  
   loadRepos(value);
+};
+
+const submitRepos = function (name, repo) {
+  user = name;
+  repos = repo
+  window.history.pushState({ page: 'repositories' }, "", `/my_repositories/${name}/${repo}`);
+  console.log("run submitRepos");
+  
+  searchReposDetail(user, repos);
 };
 
 function clearInElementById(id) {
   document.getElementById(id).innerHTML = "";
 }
 
-function setTitleUserName(user_name) {
-  const elementTitle = document.getElementById("user_name");
-  elementTitle.textContent = user_name;
+function setTitleUserName(user_name = '', repos_name = '') {
+  const title = document.getElementById("title_name");
+  title ? title.remove() : '';
+  if (user_name) {
+    const existingElement = document.getElementById("repositories");
+    const parent = existingElement.parentNode;
+    const newElement = document.createElement("h1");
+    if (repos_name) newElement.textContent = `${user_name}/${repos_name}`
+    else newElement.textContent = user_name;
+    newElement.id = "title_name"
+    parent.insertBefore(newElement, existingElement);
+  }
+
 }
 
 
@@ -125,8 +135,11 @@ function createListRepositories(id, array) {
   const repository = createElement("li", {
     children: [
       createElement("h3", {
-        text: `${array.name}`,
         children: [
+          createElement("a", {
+            attributes: { onclick: `submitRepos("${array.owner.login}", "${array.name}")` },
+            text: `${array.name}`,
+          }),
           createElement("span", {
             text: !array.private ? "Public" : "",
             classes: "label_type",
@@ -141,7 +154,7 @@ function createListRepositories(id, array) {
               createElement("span", {
                 classes: [
                   "circle",
-                  array.language?.toLowerCase().replace(" ", "_"),
+                  array.language?.toLowerCase().replaceAll(" ", "_"),
                 ],
               }),
               createElement("span", {
@@ -227,12 +240,34 @@ function renderPage(state) {
     case 'search_user':
       searchUsers(search_value);
       break;
-    case 'contact':
+    case 'repos_detail':
+      searchReposDetail(user, repos)
       // content.innerHTML = `<h1>Контакты</h1>`;
       break;
     // default:
     //   content.innerHTML = `<h1>Страница по умолчанию</h1>`;
   }
+}
+
+
+function searchReposDetail(owner, repo) {
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents/`;
+
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((users) => {
+      clearInElementById("repositories");
+      setTitleUserName(owner, repo);
+      // users.items.forEach((user) => {
+      //   createListUsers("repositories", user);
+      // });
+    })
+    .catch((error) => console.error("Error:", error));
 }
 
 
@@ -248,6 +283,7 @@ function searchUsers(search_query) {
     })
     .then((users) => {
       clearInElementById("repositories");
+      setTitleUserName();
       users.items.forEach((user) => {
         createListUsers("repositories", user);
       });
@@ -268,10 +304,16 @@ function loadRepos(username = "DozArt") {
     })
     .then((repos) => {
       clearInElementById("repositories");
-      setTitleUserName(repos[0].owner.login);
+      setTitleUserName(username);
       repos.forEach((repo) => {
         createListRepositories("repositories", repo);
       });
     })
     .catch((error) => console.error("Error:", error));
 }
+
+
+// кнопка назад
+// репозиторий подробнее
+// изменение состояния loader
+// pointer на ссылки
