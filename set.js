@@ -1,34 +1,72 @@
-let url_string = window.location.href;
-let url_full = new URL(url_string);
-let search_value = url_full.searchParams.get("username");
-
-if (search_value) {
-  document.getElementById("search_user").value = search_value;
-  searchUsers(search_value);
-}
-
-
-let search = ""; // window.location.search  // пока не требуется
+let search_value = '';
 let user = "";
 let repos = "";
-let pathname = sessionStorage.getItem("pathname");
-sessionStorage.removeItem("pathname");
 
-if (pathname) {
-  let path_split = pathname.split("/");
-  if (path_split.indexOf("") === 0) path_split.shift();
-  if (path_split.indexOf("my_repositories") === 0) path_split.shift();
-  user = path_split[0];
-  if (user) loadRepos(user);
-  repos = path_split[1]; // а он есть?
-  console.log(path_split);
-  window.history.pushState({ page: 2 }, "", `${pathname}${search}`);
+window.addEventListener('DOMContentLoaded', () => {
+  getSearchFromLocation();
+  getUserAndReposFromSession();
+  getUserAndReposFromLocation();
+  
+  if(user) renderPage({ page: 'repositories' });
+  else if(search_value) renderPage({page: 'search_user'})
+  // else if(repos) renderPage({ page: 'search_user' });
+});
+
+
+function getSearchFromLocation() {
+  let url_string = window.location.href;
+  let url_full = new URL(url_string);
+  search_value = url_full.searchParams.get("username");
+  document.getElementById("search_user").value = search_value;
 }
+
+function getUserAndReposFromLocation() {
+  let pathname = window.location.pathname;
+  let path_split = pathname.split("/").filter(item => item !== "" && item !== "my_repositories");
+  user = path_split[0];
+  repos = path_split[1];
+  console.log('получили пользователя из location')
+}
+
+function getUserAndReposFromSession() {
+  let search = ""; // window.location.search  // пока не требуется
+
+  let pathname = sessionStorage.getItem("pathname");
+  sessionStorage.removeItem("pathname");
+  
+  if (pathname) {
+    let path_split = pathname.split("/").filter(item => item !== "" && item !== "my_repositories");
+    // user = path_split[0];
+    // if (user) loadRepos(user);
+    // repos = path_split[1]; // а он есть?
+    console.log('даннные из session', path_split);
+    window.history.pushState({ page: 'repositories' }, "", `${pathname}${search}`);
+    // return true;
+  }
+}
+
+
+// if (search_value) {
+//   document.getElementById("search_user").value = search_value;
+//   searchUsers(search_value);
+// }
+
+window.addEventListener('popstate', (event) => {
+  getSearchFromLocation();
+  getUserAndReposFromLocation();
+  if (event.state) {
+    console.log(event.state)
+    renderPage(event.state);
+  } else {
+    console.log('нет состояния')
+    // renderPage({ page: "default" });
+  }
+});
 
 
 function submitSearch(value) {
   window.history.pushState(
-    { page: 2 },
+    { page: 'search_user' },
     "",
     `/my_repositories/?username=${value}`
   );
@@ -37,8 +75,9 @@ function submitSearch(value) {
 }
 
 const submitUser = function (value) {
-  window.history.pushState({ page: 2 }, "", `/my_repositories/${value}`);
+  window.history.pushState({ page: 'repositories' }, "", `/my_repositories/${value}`);
   console.log("run submitUser");
+  user = value;
   loadRepos(value);
 };
 
@@ -50,6 +89,7 @@ function setTitleUserName(user_name) {
   const elementTitle = document.getElementById("user_name");
   elementTitle.textContent = user_name;
 }
+
 
 function createListUsers(id, array) {
   const addUsers = document.getElementById(id);
@@ -73,6 +113,7 @@ function createListUsers(id, array) {
 
   addUsers.appendChild(user);
 }
+
 
 function createListRepositories(id, array) {
   const addRepositories = document.getElementById(id);
@@ -120,6 +161,7 @@ function createListRepositories(id, array) {
 
   addRepositories.appendChild(repository);
 }
+
 
 /**
  * Универсальная функция для создания HTML-элементов.
@@ -175,6 +217,25 @@ function createElement(tagName, options = {}) {
   return element;
 }
 
+
+function renderPage(state) {
+
+  switch (state.page) {
+    case 'repositories':
+      loadRepos(user)  // но надо эти данные взять из адресной строки
+      break;
+    case 'search_user':
+      searchUsers(search_value);
+      break;
+    case 'contact':
+      // content.innerHTML = `<h1>Контакты</h1>`;
+      break;
+    // default:
+    //   content.innerHTML = `<h1>Страница по умолчанию</h1>`;
+  }
+}
+
+
 function searchUsers(search_query) {
   const url = `https://api.github.com/search/users?q=${search_query}`;
 
@@ -193,6 +254,7 @@ function searchUsers(search_query) {
     })
     .catch((error) => console.error("Error:", error));
 }
+
 
 function loadRepos(username = "DozArt") {
   const url = `https://api.github.com/users/${username}/repos`;

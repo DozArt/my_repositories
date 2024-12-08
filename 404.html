@@ -13,9 +13,11 @@
       sessionStorage.setItem("pathname", pathname);
       // sessionStorage.setItem('search', search)
 
-      let path_split = pathname.split("/");
-      if (path_split.indexOf("") === 0) path_split.shift();
-      if (path_split.length < 3)
+      let path_split = pathname.split("/").filter(item => item !== "");
+      // if (path_split.indexOf("") === 0) path_split.shift();
+      // if (path_split.lastIndexOf("") === path_split.length-1) path_split.pop();  // проверить
+
+      if (path_split.length <= 3)
         switch (
           path_split[0] //  && path_split[1] !== '404.html'
         ) {
