@@ -26,6 +26,10 @@ body {
   }
 }
 
+a {
+  cursor: pointer;
+}
+
 .control_panel {
   display: flex;
   gap: var(--base-field);
@@ -93,6 +97,9 @@ body {
     padding: 24px 0;
     border-bottom: 1px solid var(--main-border-color);
   }
+}
+.list_files {
+  list-style-type: none;
 }
 .label_type {
   border: 1px solid var(--main-border-color);

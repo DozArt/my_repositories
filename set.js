@@ -1,6 +1,14 @@
 let search_value = '';
 let user = "";
 let repos = "";
+let elementLoading = document.getElementById('loading');
+
+const loading = {
+  block: function(){elementLoading.style.display = 'block';},
+  none: function(){elementLoading.style.display = 'none';},
+}
+
+
 
 window.addEventListener('DOMContentLoaded', () => {
   getSearchFromLocation();
@@ -10,7 +18,6 @@ window.addEventListener('DOMContentLoaded', () => {
   if(repos) renderPage({ page: 'repos_detail' });
   else if(user) renderPage({ page: 'repositories' });
   else if(search_value) renderPage({page: 'search_user'})
-  // else if(repos) renderPage({ page: 'search_user' });
 });
 
 window.addEventListener('popstate', (event) => {
@@ -21,7 +28,7 @@ window.addEventListener('popstate', (event) => {
     renderPage(event.state);
   } else {
     console.log('нет состояния')
-    // renderPage({ page: "default" });
+    renderPage({ page: "default" });
   }
 });
 
@@ -38,7 +45,7 @@ function getUserAndReposFromLocation() {
   let path_split = pathname.split("/").filter(item => item !== "" && item !== "my_repositories");
   user = path_split[0];
   repos = path_split[1];
-  console.log('получили пользователя из location')
+  console.log('прочитали location')
 }
 
 function getUserAndReposFromSession() {
@@ -75,7 +82,7 @@ const submitUser = function (value) {
 const submitRepos = function (name, repo) {
   user = name;
   repos = repo
-  window.history.pushState({ page: 'repositories' }, "", `/my_repositories/${name}/${repo}`);
+  window.history.pushState({ page: 'repos_detail' }, "", `/my_repositories/${name}/${repo}`);
   console.log("run submitRepos");
   
   searchReposDetail(user, repos);
@@ -91,18 +98,42 @@ function setTitleUserName(user_name = '', repos_name = '') {
   if (user_name) {
     const existingElement = document.getElementById("repositories");
     const parent = existingElement.parentNode;
-    const newElement = document.createElement("h1");
-    if (repos_name) newElement.textContent = `${user_name}/${repos_name}`
-    else newElement.textContent = user_name;
-    newElement.id = "title_name"
-    parent.insertBefore(newElement, existingElement);
+    // const newElementBack = document.createElement("a");
+    // newElementBack.text = 'back'
+    // newElementBack.addEventListener('click', window.history.back)
+    const newTitle = document.createElement("h1");
+    if (repos_name) newTitle.textContent = `${user_name}/${repos_name}`
+    else newTitle.textContent = user_name;
+    newTitle.id = "title_name"
+    // newTitle.appendChild(newElementBack)
+    parent.insertBefore(newTitle, existingElement);
   }
 
 }
 
 
+function createListFiles(id, array) {
+  const addFiles = document.getElementById(id);
+  addFiles.classList.remove();
+  addFiles.setAttribute("class", "list_files")
+
+  const user = createElement("li", {
+    children: [
+      createElement("img", {
+        attributes: {src: `../public/${array.type}.svg`},
+      }),
+      ` ${array.name}`,
+    ],
+  });
+
+  addFiles.appendChild(user);
+}
+
+
 function createListUsers(id, array) {
   const addUsers = document.getElementById(id);
+  addUsers.classList.remove();
+  addUsers.setAttribute("class", "list_repositories")
 
   const user = createElement("li", {
     children: [
@@ -127,6 +158,8 @@ function createListUsers(id, array) {
 
 function createListRepositories(id, array) {
   const addRepositories = document.getElementById(id);
+  addRepositories.classList.remove();
+  addRepositories.setAttribute("class", "list_repositories")
   let data_update = new Date(array.updated_at);
   const options = { year: "numeric", month: "short", day: "numeric" };
   const formattedDate = data_update.toLocaleDateString("en-US", options);
@@ -242,15 +275,15 @@ function renderPage(state) {
       break;
     case 'repos_detail':
       searchReposDetail(user, repos)
-      // content.innerHTML = `<h1>Контакты</h1>`;
       break;
-    // default:
-    //   content.innerHTML = `<h1>Страница по умолчанию</h1>`;
+    default:
+      searchUsers("DozArt");
   }
 }
 
 
 function searchReposDetail(owner, repo) {
+  loading.block()
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/`;
 
   fetch(url)
@@ -260,18 +293,20 @@ function searchReposDetail(owner, repo) {
       }
       return response.json();
     })
-    .then((users) => {
+    .then((files) => {
       clearInElementById("repositories");
       setTitleUserName(owner, repo);
-      // users.items.forEach((user) => {
-      //   createListUsers("repositories", user);
-      // });
+      files.forEach((file) => {
+        createListFiles("repositories", file)
+      });
     })
     .catch((error) => console.error("Error:", error));
+  loading.none()
 }
 
 
 function searchUsers(search_query) {
+  loading.block()
   const url = `https://api.github.com/search/users?q=${search_query}`;
 
   fetch(url)
@@ -289,10 +324,12 @@ function searchUsers(search_query) {
       });
     })
     .catch((error) => console.error("Error:", error));
+    loading.none()
 }
 
 
 function loadRepos(username = "DozArt") {
+  loading.block()
   const url = `https://api.github.com/users/${username}/repos`;
 
   fetch(url)
@@ -310,10 +347,6 @@ function loadRepos(username = "DozArt") {
       });
     })
     .catch((error) => console.error("Error:", error));
+  loading.none()
 }
-
-
-// кнопка назад
-// репозиторий подробнее
-// изменение состояния loader
-// pointer на ссылки
+loading.none()
