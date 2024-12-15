@@ -1,0 +1,22 @@
+.selector_control_unit {
+    /* border: 2px solid black; */
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    display: flex;
+    gap: 5px;
+}
+
+@keyframes selection {
+    from {
+        background-color: #5a64f1;
+    }
+    to {
+        background-color: #5a64f100;
+    }
+}
+
+.select_element {
+    animation: selection 1s linear;
+}

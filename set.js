@@ -3,11 +3,11 @@ let user = "";
 let repos = "";
 let elementLoading = document.getElementById('loading');
 
+
 const loading = {
   block: function(){elementLoading.style.display = 'block';},
   none: function(){elementLoading.style.display = 'none';},
 }
-
 
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -19,6 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
   else if(user) renderPage({ page: 'repositories' });
   else if(search_value) renderPage({page: 'search_user'})
 });
+
 
 window.addEventListener('popstate', (event) => {
   getSearchFromLocation();
@@ -40,13 +41,14 @@ function getSearchFromLocation() {
   document.getElementById("search_user").value = search_value;
 }
 
+
 function getUserAndReposFromLocation() {
   let pathname = window.location.pathname;
   let path_split = pathname.split("/").filter(item => item !== "" && item !== "my_repositories");
   user = path_split[0];
   repos = path_split[1];
-  console.log('прочитали location')
 }
+
 
 function getUserAndReposFromSession() {
   let search = ""; // window.location.search  // пока не требуется
@@ -68,36 +70,35 @@ function submitSearch(value) {
     `/my_repositories/?username=${value}`
   );
   searchUsers(value);
-  console.log("run SubmitSearchUsers");
 }
+
 
 const submitUser = function (value) {
   user = value;
   window.history.pushState({ page: 'repositories' }, "", `/my_repositories/${value}`);
-  console.log("run submitUser");
-  
   loadRepos(value);
 };
+
 
 const submitRepos = function (name, repo) {
   user = name;
   repos = repo
   window.history.pushState({ page: 'repos_detail' }, "", `/my_repositories/${name}/${repo}`);
-  console.log("run submitRepos");
-  
   searchReposDetail(user, repos);
 };
+
 
 function clearInElementById(id) {
   document.getElementById(id).innerHTML = "";
 }
+
 
 function setTitleUserName(user_name = '', repos_name = '') {
   const title = document.getElementById("title_name");
   title ? title.remove() : '';
   if (user_name) {
     const existingElement = document.getElementById("repositories");
-    const parent = existingElement.parentNode;
+    const parent = existingElement.parentNode;  // родительский элемент
     // const newElementBack = document.createElement("a");
     // newElementBack.text = 'back'
     // newElementBack.addEventListener('click', window.history.back)
@@ -106,7 +107,7 @@ function setTitleUserName(user_name = '', repos_name = '') {
     else newTitle.textContent = user_name;
     newTitle.id = "title_name"
     // newTitle.appendChild(newElementBack)
-    parent.insertBefore(newTitle, existingElement);
+    parent.insertBefore(newTitle, existingElement);  // Добавить потомка перед эл.
   }
 
 }
@@ -114,8 +115,8 @@ function setTitleUserName(user_name = '', repos_name = '') {
 
 function createListFiles(id, array) {
   const addFiles = document.getElementById(id);
-  addFiles.classList.remove();
-  addFiles.setAttribute("class", "list_files")
+  addFiles.classList.remove("list_repositories");
+  addFiles.classList.add("list_files")
 
   const user = createElement("li", {
     children: [
@@ -132,8 +133,8 @@ function createListFiles(id, array) {
 
 function createListUsers(id, array) {
   const addUsers = document.getElementById(id);
-  addUsers.classList.remove();
-  addUsers.setAttribute("class", "list_repositories")
+  addUsers.classList.remove("list_files");
+  addUsers.classList.add("list_repositories")
 
   const user = createElement("li", {
     children: [
@@ -158,8 +159,8 @@ function createListUsers(id, array) {
 
 function createListRepositories(id, array) {
   const addRepositories = document.getElementById(id);
-  addRepositories.classList.remove();
-  addRepositories.setAttribute("class", "list_repositories")
+  addRepositories.classList.remove("list_files");
+  addRepositories.classList.add("list_repositories")
   let data_update = new Date(array.updated_at);
   const options = { year: "numeric", month: "short", day: "numeric" };
   const formattedDate = data_update.toLocaleDateString("en-US", options);
@@ -265,7 +266,6 @@ function createElement(tagName, options = {}) {
 
 
 function renderPage(state) {
-
   switch (state.page) {
     case 'repositories':
       loadRepos(user)  // но надо эти данные взять из адресной строки
@@ -350,3 +350,6 @@ function loadRepos(username = "DozArt") {
   loading.none()
 }
 loading.none()
+
+
+// const select_element = 
